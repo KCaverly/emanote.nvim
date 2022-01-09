@@ -60,6 +60,7 @@ end
 
 function M.killServer()
 
+  print("Killing All Running Emanote Servers...")
   config_path = "~/personal/kb"
   emanote_host = "localhost"
   emanote_port = "8000"
