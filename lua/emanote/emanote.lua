@@ -1,4 +1,5 @@
 local Path = require("plenary/path")
+local Job = require("plenary/job")
 local uv = vim.loop
 
 local M = {}
@@ -7,8 +8,6 @@ function M.sayHelloWorld() print('Hello world!') end
 
 function buildParents(path, sep)
 
-
-    print(path)
     path = vim.fn.expand(path)
 
     if sep == nil then
@@ -23,11 +22,6 @@ function buildParents(path, sep)
       full_path = vim.fn.expand(full_path)
 
       if vim.fn.isdirectory(full_path) == 0 then
-
-        print("=====")
-        print(full_path)
-        print(path)
-        print(full_path ~= path)
         if full_path ~= path then
           vim.fn.mkdir(full_path)
         end
@@ -35,6 +29,7 @@ function buildParents(path, sep)
 
     end
 end
+
 
 -- Function to create new note
 local function createNewNote(name)
@@ -59,5 +54,34 @@ function M.newNote()
   }, function(name) createNewNote(name) end) 
 
 end
+
+-- Launch Server Functionality
+-- 
+
+function M.killServer()
+
+  config_path = "~/personal/kb"
+  emanote_host = "localhost"
+  emanote_port = "8000"
+  vim.api.nvim_exec("!{pid=$(pgrep emanote) && kill $pid}", 1)
+
+end
+
+function M.launchServer()
+  
+  config_path = "~/personal/kb"
+  emanote_host = "localhost"
+  emanote_port = "8000"
+
+  M.killServer()
+
+  print("Launching Emanote Server @ http://"..emanote_host..":"..emanote_port)
+
+  Job:new({
+    command = 'emanote',
+    cwd = config_path
+  }):start()
+
+end 
 
 return M
