@@ -5,25 +5,49 @@ local M = {}
 
 function M.sayHelloWorld() print('Hello world!') end
 
-function dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. dump(v) .. ','
+function buildParents(path, sep)
+
+
+    print(path)
+    path = vim.fn.expand(path)
+
+    if sep == nil then
+      sep = "/"
+    end
+
+    local full_path = ""
+    for parent in string.gmatch(path, "([^"..sep.."]+)") do
+
+      full_path = full_path .. "/" .. parent
+
+      full_path = vim.fn.expand(full_path)
+
+      if vim.fn.isdirectory(full_path) == 0 then
+
+        print("=====")
+        print(full_path)
+        print(path)
+        print(full_path ~= path)
+        if full_path ~= path then
+          vim.fn.mkdir(full_path)
+        end
       end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
+
+    end
 end
 
 -- Function to create new note
 local function createNewNote(name)
 
+  -- config_path = "~/personal/kb"
   config_path = "~/personal/kb"
-  exec = ":e " .. config_path .. "/" .. name
+  full_path = config_path .. "/" .. name
+  exec = ":e " .. full_path
+
+  buildParents(full_path)
+
   vim.api.nvim_exec(exec, 0)
+  vim.api.nvim_exec(":w", 0)
 
 end
 
