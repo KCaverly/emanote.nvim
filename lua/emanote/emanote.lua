@@ -4,7 +4,7 @@ local uv = vim.loop
 
 local M = {}
 
-function M.sayHelloWorld() print('Hello world!') end
+function M.printPath() print(M.config.emanote_home) end
 
 function buildParents(path, sep)
 
@@ -35,8 +35,7 @@ end
 local function createNewNote(name)
 
   -- config_path = "~/personal/kb"
-  config_path = "~/personal/kb"
-  full_path = config_path .. "/" .. name
+  full_path = M.config.emanote_home .. "/" .. name
   exec = ":e " .. full_path
 
   buildParents(full_path)
@@ -61,16 +60,12 @@ end
 function M.killServer()
 
   print("Killing All Running Emanote Servers...")
-  config_path = "~/personal/kb"
-  emanote_host = "localhost"
-  emanote_port = "8000"
   vim.api.nvim_exec("!{pid=$(pgrep emanote) && kill $pid}", 1)
 
 end
 
 function M.launchServer()
   
-  config_path = "~/personal/kb"
   emanote_host = "localhost"
   emanote_port = "8000"
 
@@ -80,9 +75,35 @@ function M.launchServer()
 
   Job:new({
     command = 'emanote',
-    cwd = config_path
+    cwd = M.config.emanote_home
   }):start()
 
 end 
+
+
+do
+
+  local default_config = {
+    emanote_home = "~/emanote",
+    leader = "g"
+  }
+
+  function M.setup(user_config)
+    
+    -- Check if Emanote is Executable in Path
+    if vim.fn.executable("emanote") == 0 then
+      error("emanote is not executable.")
+    end
+
+    -- Manage Config
+    user_config = user_config or {}
+    M.config = vim.tbl_extend("keep", user_config, default_config)
+
+    -- Transform Config if Needed
+    M.config.emanote_dir = vim.fn.expand(M.config.emanote_dir)
+  end
+
+end
+
 
 return M
