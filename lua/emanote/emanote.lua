@@ -49,8 +49,8 @@ function M.newNote()
   
   -- createFloatingInput()
   vim.ui.input({
-    prompt="Name of New Note:"
-  }, function(name) createNewNote(name) end) 
+    prompt="Name of New Note:",
+  }, function(name) if name ~= nil then createNewNote(name) end end) 
 
 end
 
