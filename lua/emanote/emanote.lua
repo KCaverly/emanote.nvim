@@ -85,6 +85,7 @@ do
 
   local default_config = {
     emanote_home = "~/emanote",
+    mappings = true,
     leader = "g"
   }
 
@@ -101,6 +102,12 @@ do
 
     -- Transform Config if Needed
     M.config.emanote_dir = vim.fn.expand(M.config.emanote_dir)
+  
+    -- Set mappings
+    if M.config.mappings == true then
+      require('emanote/mappings').set_mappings()
+    end 
+
   end
 
 end
