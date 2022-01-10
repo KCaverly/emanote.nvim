@@ -48,8 +48,11 @@ end
 function M.newNote() 
   
   -- createFloatingInput()
+  height = vim.api.nvim_win_get_height(0) 
+  width = vim.api.nvim_win_get_width(0)
+
   vim.ui.input({
-    prompt="Name of New Note:",
+    prompt="Name of New Note: ",
   }, function(name) if name ~= nil then createNewNote(name) end end) 
 
 end
