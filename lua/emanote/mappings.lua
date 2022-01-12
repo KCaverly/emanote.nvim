@@ -11,6 +11,7 @@ function M.set_mappings()
   M.map("n", "<cmd>lua require('emanote').newNote()<CR>")
   M.map("s", "<cmd>lua require('emanote').launchServer()<CR>")
   M.map("k", "<cmd>lua require('emanote').killServer()<CR>")
+  M.map("t", "<cmd>lua require('emanote.telescope').findNotes()<CR>")
 end
 
 return M
