@@ -5,10 +5,6 @@
 emanote.nvim is a plugin for demo purpose. Development is in progress.
 
 To find out more:
-https://github.com/KCaverly/emanote-nvim
+https://github.com/KCaverly/emanote.nvim
 
-  :h AlphaHelloWorld
-
-AlphaHelloWorld                                                *AlphaHelloWorld*
-    Just say "Hello world!!"
 =================================================================================
